@@ -15,7 +15,7 @@
   	
   "modifier", "attribute", "selfcontrol", "damage", "roll", "skill", "pdf"
 */
-export default function parselink(str, htmldesc, clrdmods = false) {
+export default function parselink(str, htmldesc?, clrdmods = false) {
   if (str.length < 2)
     return { "text": str };
     
@@ -317,7 +317,7 @@ function gmspan(str, action, plus, clrdmods) {
   return s + "</span>";
 }
 
-function gspan(str, action, prefix, comment) {
+function gspan(str, action, prefix?, comment?) {
   let s = "<span class='gurpslink'";
 	if (!!action) s += " data-action='" + btoa(JSON.stringify(action)) + "'";
 	s += ">" + (!!prefix ? prefix : "") + str.trim() + "</span>";

@@ -3,6 +3,11 @@
  * @extends {ItemSheet}
  */
 export class GurpsItemSheet extends ItemSheet {
+	public element: any;
+	public options: any;
+	public object: any;
+	public form: any;
+	public _onSubmit: any;
 
   /** @override */
 	static get defaultOptions() {

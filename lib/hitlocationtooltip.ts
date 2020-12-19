@@ -17,6 +17,8 @@ export const SETTING_NAME = 'hitLocationToolTips'
     This adds or removes the 'gurpstippable' class to the element.
 */
 export default class HitLocationEquipmentTooltip {
+	public display: any;
+
   constructor() {
     this.setup()
     this.display = true

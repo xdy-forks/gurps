@@ -41,8 +41,15 @@ const POSSIBLE_ATTRIBUTE_KEYS =  {
 };
 
 export class NpcInput extends Application {
-	
-  constructor(actor, options = {}) {
+	public mook: any;
+	public testing: any;
+	public createButton: any;
+	public savedStatBlock: any;
+	public render: any;
+	public statblk: any;
+	public nextLine: any;
+
+  constructor(actor?, options = {}) {
 	  super(options);
 		this.mook = new Mook();
 		this.testing = true;
@@ -283,7 +290,7 @@ export class NpcInput extends Application {
 	}
 	
 	  // return an array of string representing each line
-  prep(text, delim) {
+  prep(text, delim?) {
 		var ans;
     if (!!delim)
       ans = this.parseDelimLines(text, delim);
@@ -969,6 +976,30 @@ export class NpcInput extends Application {
 
 
 class Mook {
+	public name: any;
+	public title: any;
+	public desc: any;
+	public st: any;
+	public dx: any;
+	public iq: any;
+	public ht: any;
+	public dodge: any;
+	public parry: any;
+	public hp: any;
+	public will: any;
+	public per: any;
+	public fp: any;
+	public speed: any;
+	public move: any;
+	public sm: any;
+	public dr: any;
+	public notes: any;
+	public traits: any;
+	public skills: any;
+	public melee: any;
+	public ranged: any;
+	public spells: any;
+
 	constructor() {
 		this.name = "";
 		this.title = "bad guy";
@@ -1006,11 +1037,11 @@ let EX = [   // 0
 Goblins are the smallest of the goblin-kin, and therefore
 spend their days being bullied by orcs and tossed around by
 angry hobgoblins. This has led to a cowardly disposition,
-yet theyüfre survivors, and deadlier in a fight than the typical
+yet theyï¿½fre survivors, and deadlier in a fight than the typical
 human. In combat, they prefer stealthy ambushes involving
 ranged (and preferably poisoned) weapons, followed by running
 away.
-Goblins stand 2üh shorter than humans on average, but
+Goblins stand 2ï¿½h shorter than humans on average, but
 like all goblin-kin are densely built and thus no lighter. They
 resemble nothing so much as misshapen, hunchbacked elves
 with pointy ears and needle-like teeth. Skin tones vary greatly,
@@ -1046,8 +1077,8 @@ for a saber (1d cutting or impaling) to wave around while
 giving orders. Shamans have IQ 10+ and Power Investiture
 1-3 . and goblin gods grant their clerics nasty wizardly
 spells such as Deathtouch! Goblins are easily intimidated,
-so theyüfll negotiate if cornered . . . and backstab as soon as
-they arenüft.`,
+so theyï¿½fll negotiate if cornered . . . and backstab as soon as
+they arenï¿½ft.`,
 // 1
 	`ST: 13 HP: 13 Speed: 5.00
 DX: 11 Will: 9 Move: 5
@@ -1114,8 +1145,8 @@ or 1d impaling), small mace (1d+3 crushing), spear (1d+1
 impaling), etc. Reach 1.
 Traits: Appearance (Monstrous); Automaton; Brittle; Cannot
 Float; Cannot Learn; Dependency (Loses 1 HP per minute
-in no-mana areas); Doesnüft Breathe; Doesnüft Eat or Drink;
-Doesnüft Sleep; High Pain Threshold; Immunity to Disease;
+in no-mana areas); Doesnï¿½ft Breathe; Doesnï¿½ft Eat or Drink;
+Doesnï¿½ft Sleep; High Pain Threshold; Immunity to Disease;
 Immunity to Mind Control; Immunity to Poison; Indomitable;
 Mute; No Blood; No Brain; No Eyes; No Sense of
 Smell/Taste; No Vitals; Reprogrammable; Single-Minded;
@@ -1182,11 +1213,11 @@ dismissed by the Banish spell (Spells, pp. 59-60).
 DX: 14 Will: 13 Move: 10 (Air Move 13)
 IQ: 5 Per: 12
 HT: 12 FP: 12 SM: +1
-Dodge: 10 Parry: 12 (¾2) DR: 2
+Dodge: 10 Parry: 12 (ï¿½2) DR: 2
 Dragon's Head (16): Bite or horns, 2d+2 cutting. Horns count
 as weapon, not as body part, both to attack and parry!
 Reach C, 1.
-Fire Breath (16): 2d+1 burning in a 1-yard-wide ¾ 10-yardlong
+Fire Breath (16): 2d+1 burning in a 1-yard-wide ï¿½ 10-yardlong
 cone that inflicts large-area injury (Exploits, p. 53);
 see Area and Spreading Attacks (Exploits, pp. 45-46). Costs
 2 FP per use, with no recharge time or limit on uses/day.
@@ -1198,7 +1229,7 @@ Lion's Head (16): Bite, 2d+2 cutting. Reach C, 1.
 Serpent's Head (16): Bite (at only ST 18), 1d+2 impaling +
 follow-up 2d toxic, or 1d with a successful HT roll. Reach
 C, 1.
-Traits: 360ø Vision; Bad Temper (9); Combat Reflexes; DR
+Traits: 360ï¿½ Vision; Bad Temper (9); Combat Reflexes; DR
 2 vs. heat/fire only; Extra Attack 3; Extra-Flexible; Extra
 Heads 3; Flight (Winged); Night Vision 5; Penetrating
 Voice; Quadruped; Temperature Tolerance 2 (Heat); Wild
@@ -1286,7 +1317,7 @@ Striking ST), sneakier (higher Night Vision and Silence), or
 more skilled. Clawed hands prevent weapon use. Against a
 group carrying wolfsbane and bristling with silver weapons,
 werewolves will stay hidden or pretend to be human .
-but if they canüft, theyüfll negotiate. Truly evil.
+but if they canï¿½ft, theyï¿½fll negotiate. Truly evil.
 
 
 `,
@@ -1345,7 +1376,7 @@ for both.
 ST 10; DX 10; IQ 9; HT 11.
 Damage 1d-2/1d; BL 20 lbs.; HP 10; Will 9; Per 10; FP 11.
 Basic Speed 5.25; Basic Move 5; Dodge 8; Parry 9 (Brawling).
-5Æ6ö-6Æ; 150-170 lbs.
+5ï¿½6ï¿½-6ï¿½; 150-170 lbs.
 Advantages/Disadvantages: Cantonese (Native).
 Skills: Brawling-13; Guns/TL8 (Pistol)-12; Guns/TL8
 (SMG)-12; Knife-14.
@@ -1355,7 +1386,7 @@ Skills: Brawling-13; Guns/TL8 (Pistol)-12; Guns/TL8
 ST 11; DX 12; IQ 10; HT 11.
 Damage 1d-1/1d+1; BL 24 lbs.; HP 11; Will 10; Per 12; FP 11.
 Basic Speed 5.75; Basic Move 5; Dodge 9; Parry 10 (Knife).
-5Æ8ö; 155 lbs.
+5ï¿½8ï¿½; 155 lbs.
 Advantages/Disadvantages: Acute Hearing 2; Cantonese
 (Native); Combat Reflexes.
 Skills: Brawling-14; Guns/TL8 (Pistol)-14; Guns/TL8
@@ -1415,14 +1446,14 @@ way or another.`,
 `Tsorvano
 273 points
 Tsorvano is an ex-brigand who met Halmaro years
-ago at swordÆs point, while Halmaro was an aggressive
+ago at swordï¿½s point, while Halmaro was an aggressive
 young caravan-master. Neither one will say who won
 that first encounter, but soon afterward Tsorvano
-became the merchantÆs loyal henchman.
+became the merchantï¿½s loyal henchman.
 Tsorvano wears his broadsword for everyday use, but
-if he expects trouble, heÆll sling his greatsword on his back.
+if he expects trouble, heï¿½ll sling his greatsword on his back.
 Early 40s; Swarthy, bald, hooked nose, brilliant
-green eyes; 6Æ4ö, 220 lbs.
+green eyes; 6ï¿½4ï¿½, 220 lbs.
 Attributes: ST 13 [30], DX 14 [80], IQ 13 [60], HT 12
 [20]
 Secondary Characteristics: Dmg 1d/2d-1, BL 34, HP
@@ -1433,7 +1464,7 @@ Advantages: Damage Resistance DR 1 (Tough Skin,
 -40%) [3]; Wealth (Wealthy) [20].
 Disadvantages: Miserly (12) [-10]; Sense of Duty
 (Halmaro and Guild) [-10]; Stubborn [-5].
-Quirks: Dotes on HalmaroÆs daughters; Dislikes clerics,
+Quirks: Dotes on Halmaroï¿½s daughters; Dislikes clerics,
 will always wear the minimum for comfort and propriety;
 Enjoys embarrassing his inferiors; Likes
 open spaces; Very cold to strangers. [-5]

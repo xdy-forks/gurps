@@ -24,6 +24,31 @@ const HOMOGENOUS = 'homogenous'
 const armorDivisorSteps = [-1, 100, 5, 3, 2, 1]
 
 export class DamageCalculator {
+	public _useBluntTrauma: any;
+	public _useLocationModifiers: any;
+	public _useArmorDivisor: any;
+	public _defender: any;
+	public _attacker: any;
+	public _defaultWoundingModifiers: any;
+	public _damageType: any;
+	public _armorDivisor: any;
+	public _basicDamage: any;
+	public _applyTo: any;
+	public _hitLocation: any;
+	public _userEnteredDR: any;
+	public _userEnteredWoundModifier: any;
+	public _additionalWoundModifier: any;
+	public _isRangedHalfDamage: any;
+	public _isFlexibleArmor: any;
+	public _bluntTrauma: any;
+	public _isVulnerable: any;
+	public _vulnerabilityMultiple: any;
+	public _isHardenedDR: any;
+	public _hardenedDRLevel: any;
+	public _isInjuryTolerance: any;
+	public _injuryToleranceType: any;
+	public _maxInjuryForDiffuse: any;
+
     constructor(defender, damageData) {
         this._useBluntTrauma = game.settings.get(settings.SYSTEM_NAME, settings.SETTING_BLUNT_TRAUMA)
         this._useLocationModifiers = game.settings.get(settings.SYSTEM_NAME, settings.SETTING_LOCATION_MODIFIERS)

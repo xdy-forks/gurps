@@ -2,6 +2,8 @@ import "./markdown-it.js";
 import { SemanticVersion } from "./semver.js";
 
 export class ChangeLogWindow extends FormApplication {
+	public lastVersion: any;
+
   constructor(lastVersion) {
     super({}, {});
     

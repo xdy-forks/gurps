@@ -1,6 +1,7 @@
 import { displayMod, makeSelect, horiz } from '../lib/utilities.js'
 import parselink from '../lib/parselink.js'
 import * as settings from '../lib/miscellaneous-settings.js'
+import {GURPS} from "./gurps";
 
 // Install Custom Roll to support global modifier access (@gmod & @gmodc)
 export class GurpsRoll extends Roll {
@@ -19,6 +20,8 @@ CONFIG.Dice.rolls[0] = GurpsRoll;
 
 
 export class ModifierBucket extends Application {
+	public render: any;
+
 	constructor(options = {}) {
 		super(options)
 		for (let loc in GURPS.hitlocationRolls) {
@@ -88,7 +91,7 @@ export class ModifierBucket extends Application {
 			let ranged = [];
 			let defense = [];
 			let gen = [];
-			
+
 			let effects = game.GURPS.LastActor.effects.filter(e => !e.data.disabled);
 			for (let e of effects) {
 				let type = e.data.flags.core.statusId;
@@ -226,7 +229,7 @@ export class ModifierBucket extends Application {
 	async _onClick(event) {
 		event.preventDefault();
 		if (event.shiftKey) {
-			// If not the GM, just broadcast our mods to the chat	
+			// If not the GM, just broadcast our mods to the chat
 			if (!game.user.isGM) {
 				let messageData = {
 					content: this.chatString(this.modifierStack),
@@ -291,11 +294,11 @@ ${OtherMods}`;
 	// Public method. Used by GURPS to create a temporary modifer for an action.
 	makeModifier(mod, reason) {
 		let m = displayMod(mod);
-		return { 
-      "mod": m, 
+		return {
+      "mod": m,
       "modint": parseInt(m),
-      "desc": reason, 
-      "plus": (m[0] == "+") 
+      "desc": reason,
+      "plus": (m[0] == "+")
     };
 	}
 

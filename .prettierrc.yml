@@ -1,0 +1,20 @@
+---
+printWidth: 120
+requirePragma: true
+semi: true
+singleQuote: true
+tabWidth: 2
+useTabs: true
+trailingComma: es5
+overrides:
+  - files:
+      - "*.scss"
+      - "*.css"
+    options:
+      requirePragma: false
+      parser: scss
+  - files: "*.html"
+    options:
+      requirePragma: true
+      parser: html
+      htmlWhitespaceSensitivity: ignore

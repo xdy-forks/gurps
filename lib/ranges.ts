@@ -35,6 +35,10 @@ export const SETTING_NAME = 'rangeStrategy'
     modifier text for the modifier bucket.
  */
 export default class GURPSRange {
+	public ranges: any;
+	public _endMeasurementOrig: any;
+	public modifiers: any;
+
   constructor() {
     this.setup()
     this.ranges = basicSetRanges

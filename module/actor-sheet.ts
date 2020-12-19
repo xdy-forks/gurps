@@ -7,6 +7,9 @@ import parselink from '../lib/parselink.js';
  * @extends {ActorSheet}
  */
 export class GurpsActorSheet extends ActorSheet {
+	public actor: any;
+	public element: any;
+	public options: any;
 
   /** @override */
   static get defaultOptions() {
@@ -24,16 +27,16 @@ export class GurpsActorSheet extends ActorSheet {
   /* -------------------------------------------- */
 
   flt(str) {
-    return !!str ? parseFloat(str) : 0;
+    return str ? parseFloat(str) : 0;
   }
 
   sum(dict, type) {
     if (!dict) return 0.0;
     let sum = 0;
-    for (let k in dict) {
-      let e = dict[k];
-      let c = this.flt(e.count);
-      let t = this.flt(e[type])
+    for (const k in dict) {
+      const e = dict[k];
+      const c = this.flt(e.count);
+      const t = this.flt(e[type])
       sum += c * t;
       sum += this.sum(e.contains, type);
     }
@@ -45,7 +48,7 @@ export class GurpsActorSheet extends ActorSheet {
     const sheetData = super.getData();
     sheetData.ranges = game.GURPS.rangeObject.ranges;
     game.GURPS.SetLastActor(this.actor);
-    let eqt = this.actor.data.data.equipment || {};
+    const eqt = this.actor.data.data.equipment || {};
     sheetData.eqtsummary = {
       eqtcost: this.sum(eqt.carried, "cost"),
       eqtlbs: this.sum(eqt.carried, "weight"),
@@ -61,8 +64,12 @@ export class GurpsActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".gurpsactorsheet").each((i, li) => { li.addEventListener('mousedown', ev => this._onfocus(ev), false) });
-    html.find(".gurpsactorsheet").each((i, li) => { li.addEventListener('focus', ev => this._onfocus(ev), false) });
+    html.find(".gurpsactorsheet").each((i, li) => {
+ li.addEventListener('mousedown', ev => this._onfocus(ev), false)
+});
+    html.find(".gurpsactorsheet").each((i, li) => {
+ li.addEventListener('focus', ev => this._onfocus(ev), false)
+});
     html.find(".rollable").click(this._onClickRoll.bind(this));
     GURPS.hookupGurps(html);
     html.find(".gurpslink").contextmenu(this._onRightClickGurpslink.bind(this));
@@ -106,24 +113,24 @@ export class GurpsActorSheet extends ActorSheet {
 
   async _onDblclickSort(event) {
     event.preventDefault();
-    let element = event.currentTarget;
-    let key = element.dataset.key;
-    let self = this;
+    const element = event.currentTarget;
+    const key = element.dataset.key;
+    const self = this;
 
-    let d = new Dialog({
+    const d = new Dialog({
       title: "Sort list",
       buttons: {
         one: {
           icon: '<i class="fas fa-sort-alpha-up"></i>',
           label: "Ascending",
           callback: async () => {
-            let i = key.lastIndexOf(".");
-            let parentpath = key.substring(0, i);
-            let objkey = key.substr(i + 1);
-            let object = GURPS.decode(this.actor.data, key);
-            let t = parentpath + ".-=" + objkey;
+            const i = key.lastIndexOf(".");
+            const parentpath = key.substring(0, i);
+            const objkey = key.substr(i + 1);
+            const object = GURPS.decode(this.actor.data, key);
+            const t = parentpath + ".-=" + objkey;
             await self.actor.update({ [t]: null });		// Delete the whole object
-            let sortedobj = {};
+            const sortedobj = {};
             let index = 0;
             Object.values(object).sort((a, b) => a.name.localeCompare(b.name)).forEach(o => game.GURPS.put(sortedobj, o, index++));
             await self.actor.update({ [key]: sortedobj });
@@ -133,13 +140,13 @@ export class GurpsActorSheet extends ActorSheet {
           icon: '<i class="fas fa-sort-alpha-down"></i>',
           label: "Descending",
           callback: async () => {
-            let i = key.lastIndexOf(".");
-            let parentpath = key.substring(0, i);
-            let objkey = key.substr(i + 1);
-            let object = GURPS.decode(this.actor.data, key);
-            let t = parentpath + ".-=" + objkey;
+            const i = key.lastIndexOf(".");
+            const parentpath = key.substring(0, i);
+            const objkey = key.substr(i + 1);
+            const object = GURPS.decode(this.actor.data, key);
+            const t = parentpath + ".-=" + objkey;
             await self.actor.update({ [t]: null });		// Delete the whole object
-            let sortedobj = {};
+            const sortedobj = {};
             let index = 0;
             Object.values(object).sort((a, b) => b.name.localeCompare(a.name)).forEach(o => game.GURPS.put(sortedobj, o, index++));
             await self.actor.update({ [key]: sortedobj });
@@ -156,7 +163,7 @@ export class GurpsActorSheet extends ActorSheet {
 
   /** @override */
   async _onDrop(event) {
-    let dragData = JSON.parse(event.dataTransfer.getData("text/plain"));
+    const dragData = JSON.parse(event.dataTransfer.getData("text/plain"));
 
     if (dragData.type === 'damageItem') {
       this.actor.handleDamageDrop(dragData.payload)
@@ -167,37 +174,37 @@ export class GurpsActorSheet extends ActorSheet {
     this.handleDragFor(event, dragData, "spell", "spldraggable");
 
     if (dragData.type === 'equipment') {
-      let element = event.target;
-      let classes = $(element).attr('class') || "";
+      const element = event.target;
+      const classes = $(element).attr('class') || "";
       if (!classes.includes('eqtdraggable') && !classes.includes('eqtdragtarget')) return;
-      let targetkey = element.dataset.key;
-      if (!!targetkey) {
-        let srckey = dragData.key;
+      const targetkey = element.dataset.key;
+      if (targetkey) {
+        const srckey = dragData.key;
 
         if (srckey.includes(targetkey) || targetkey.includes(srckey)) {
           ui.notifications.error("Unable to drag and drop withing the same hierarchy.   Try moving it elsewhere first.");
           return;
         }
-        let object = GURPS.decode(this.actor.data, srckey);
+        const object = GURPS.decode(this.actor.data, srckey);
         // Because we may be modifing the same list, we have to check the order of the keys and
         // apply the operation that occurs later in the list, first (to keep the indexes the same)
-        let srca = srckey.split(".");
+        const srca = srckey.split(".");
         srca.splice(0, 3);
-        let tara = targetkey.split(".");
+        const tara = targetkey.split(".");
         tara.splice(0, 3);
-        let max = Math.min(srca.length, tara.length);
+        const max = Math.min(srca.length, tara.length);
         let isSrcFirst = false;
         for (let i = 0; i < max; i++) {
           if (parseInt(srca[i]) < parseInt(tara[i])) isSrcFirst = true;
         }
         if (targetkey.endsWith(".other") || targetkey.endsWith(".carried")) {
-          let target = GURPS.decode(this.actor.data, targetkey);
+          const target = GURPS.decode(this.actor.data, targetkey);
           if (!isSrcFirst) await GURPS.removeKey(this.actor, srckey);
           GURPS.put(target, object);
           await this.actor.update({ [targetkey]: target });
           if (isSrcFirst) await GURPS.removeKey(this.actor, srckey);
         } else {
-          let d = new Dialog({
+          const d = new Dialog({
             title: object.name,
             content: "<p>Where do you want to drop this?</p>",
             buttons: {
@@ -231,24 +238,24 @@ export class GurpsActorSheet extends ActorSheet {
 
   async handleDragFor(event, dragData, type, cls) {
     if (dragData.type === type) {
-      let element = event.target;
-      let classes = $(element).attr('class') || "";
+      const element = event.target;
+      const classes = $(element).attr('class') || "";
       if (!classes.includes(cls)) return;
-      let targetkey = element.dataset.key;
-      if (!!targetkey) {
-        let srckey = dragData.key;
+      const targetkey = element.dataset.key;
+      if (targetkey) {
+        const srckey = dragData.key;
         if (srckey.includes(targetkey) || targetkey.includes(srckey)) {
           ui.notifications.error("Unable to drag and drop withing the same hierarchy.   Try moving it elsewhere first.");
           return;
         }
-        let object = GURPS.decode(this.actor.data, srckey);
+        const object = GURPS.decode(this.actor.data, srckey);
         // Because we may be modifing the same list, we have to check the order of the keys and
         // apply the operation that occurs later in the list, first (to keep the indexes the same)
-        let srca = srckey.split(".");
+        const srca = srckey.split(".");
         srca.splice(0, 3);
-        let tara = targetkey.split(".");
+        const tara = targetkey.split(".");
         tara.splice(0, 3);
-        let max = Math.min(srca.length, tara.length);
+        const max = Math.min(srca.length, tara.length);
         let isSrcFirst = false;
         for (let i = 0; i < max; i++) {
           if (parseInt(srca[i]) < parseInt(tara[i])) isSrcFirst = true;
@@ -291,7 +298,7 @@ export class GurpsActorSheet extends ActorSheet {
     // Token Configuration
     const canConfigure = game.user.isGM || this.actor.owner;
     if (this.options.editable && canConfigure) {
-      let b = [
+      const b = [
         {
           label: isFull ? "Combat View" : "Full View",
           class: "toggle",
@@ -321,7 +328,7 @@ export class GurpsActorSheet extends ActorSheet {
 
   async _onFileImport(event) {
     event.preventDefault();
-    let element = event.currentTarget;
+    const element = event.currentTarget;
     new Dialog({
       title: `Import character data for: ${this.actor.name}`,
       content: await renderTemplate("systems/gurps/templates/import-gcs-v1-data.html", { name: '"' + this.actor.name + '"' }),
@@ -331,7 +338,7 @@ export class GurpsActorSheet extends ActorSheet {
           label: "Import",
           callback: html => {
             const form = html.find("form")[0];
-            let files = form.data.files;
+            const files = form.data.files;
             let file = null;
             if (!files.length) {
               return ui.notifications.error("You did not upload a data file!");
@@ -385,9 +392,9 @@ export class GurpsActorSheet extends ActorSheet {
 
   async _onRightClickGurpslink(event) {
     event.preventDefault();
-    let el = event.currentTarget;
+    const el = event.currentTarget;
     let action = el.dataset.action;
-    if (!!action) {
+    if (action) {
       action = JSON.parse(atob(action));
       this.whisperOtfToOwner(action.orig, event, (action.hasOwnProperty("blindroll") && !action.blindroll));  // only offer blind rolls for things that can be blind, No need to offer blind roll if it is already blind
     }
@@ -395,32 +402,32 @@ export class GurpsActorSheet extends ActorSheet {
 
   async _onRightClickPdf(event) {
     event.preventDefault();
-    let el = event.currentTarget;
+    const el = event.currentTarget;
     this.whisperOtfToOwner("PDF:" + el.innerText, event);
   }
 
   async _onRightClickGmod(event) {
     event.preventDefault();
-    let el = event.currentTarget;
-    let n = el.dataset.name;
-    let t = el.innerText;
+    const el = event.currentTarget;
+    const n = el.dataset.name;
+    const t = el.innerText;
     this.whisperOtfToOwner(t + " " + n, event);
   }
 
   async _onRightClickOtf(event) {
     event.preventDefault();
-    let el = event.currentTarget;
+    const el = event.currentTarget;
     this.whisperOtfToOwner(event.currentTarget.dataset.otf, event, !el.dataset.hasOwnProperty("damage"));    // Can't blind roll damages (yet)
   }
 
-  async whisperOtfToOwner(otf, event, canblind) {
+  async whisperOtfToOwner(otf, event, canblind?) {
     if (!game.user.isGM) return;
-    if (!!otf) {
+    if (otf) {
       otf = otf.replace(/ \(\)/g, "");  // sent as "name (mode)", and mode is empty (only necessary for attacks)
-      let users = this.actor.getUsers(CONST.ENTITY_PERMISSIONS.OWNER, true).filter(u => !u.isGM);
-      let botf = "[!" + otf + "]"
+      const users = this.actor.getUsers(CONST.ENTITY_PERMISSIONS.OWNER, true).filter(u => !u.isGM);
+      const botf = "[!" + otf + "]"
       otf = "[" + otf + "]";
-      let buttons = {};
+      const buttons = {};
       buttons.one = {
         icon: '<i class="fas fa-users"></i>',
         label: "To Everyone",
@@ -433,7 +440,7 @@ export class GurpsActorSheet extends ActorSheet {
           callback: () => this.sendOtfMessage(botf, true)
         };
       if (users.length > 0) {
-        let nms = users.map(u => u.name).join(' ');
+        const nms = users.map(u => u.name).join(' ');
         buttons.three = {
           icon: '<i class="fas fa-user"></i>',
           label: "Whisper to " + nms,
@@ -447,7 +454,7 @@ export class GurpsActorSheet extends ActorSheet {
           }
       }
 
-      let d = new Dialog({
+      const d = new Dialog({
         title: "GM 'Send Formula'",
         content: `<div style='text-align:center'>How would you like to send the formula:<br><br><div style='font-weight:700'>${otf}<br>&nbsp;</div>`,
         buttons: buttons,
@@ -457,13 +464,13 @@ export class GurpsActorSheet extends ActorSheet {
     }
   }
 
-  sendOtfMessage(content, blindroll, users) {
-    let msgData = {
+  sendOtfMessage(content, blindroll, users?) {
+    const msgData = {
       content: content,
       user: game.user._id,
       blind: blindroll
     }
-    if (!!users) {
+    if (users) {
       msgData.type = CONST.CHAT_MESSAGE_TYPES.WHISPER;
       msgData.whisper = users.map(it => it._id);
     } else {
@@ -478,13 +485,13 @@ export class GurpsActorSheet extends ActorSheet {
 
   async _onClickEnc(ev) {
     ev.preventDefault();
-    let element = ev.currentTarget;
-    let key = element.dataset.key;
-    let encs = this.actor.data.data.encumbrance;
+    const element = ev.currentTarget;
+    const key = element.dataset.key;
+    const encs = this.actor.data.data.encumbrance;
     if (encs[key].current) return;  // already selected
-    for (let enckey in encs) {
-      let enc = encs[enckey];
-      let t = "data.encumbrance." + enckey + ".current";
+    for (const enckey in encs) {
+      const enc = encs[enckey];
+      const t = "data.encumbrance." + enckey + ".current";
       if (enc.current) {
         await this.actor.update({ [t]: false });
       }
@@ -556,10 +563,10 @@ export class GurpsActorEditorSheet extends GurpsActorSheet {
         name: "Add at the end",
         icon: "<i class='fas fa-edit'></i>",
         callback: e => {
-          let p = e[0].dataset.key;
-          let i = p.lastIndexOf(".");
-          let objpath = p.substring(0, i);
-          let o = GURPS.decode(this.actor.data, objpath);
+          const p = e[0].dataset.key;
+          const i = p.lastIndexOf(".");
+          const objpath = p.substring(0, i);
+          const o = GURPS.decode(this.actor.data, objpath);
           GURPS.put(o, duplicate(obj));
           this.actor.update({ [objpath]: o });
         }
@@ -572,7 +579,7 @@ export class GurpsActorEditorSheet extends GurpsActorSheet {
       name: "Add " + name + " at the end",
       icon: "<i class='fas fa-edit'></i>",
       callback: e => {
-        let o = GURPS.decode(this.actor.data, path);
+        const o = GURPS.decode(this.actor.data, path);
         GURPS.put(o, duplicate(obj));
         this.actor.update({ [path]: o });
       }
@@ -621,8 +628,8 @@ export class GurpsActorEditorSheet extends GurpsActorSheet {
       name: "Add In (new Equipment will be contained by this)",
       icon: "<i class='fas fa-edit'></i>",
       callback: e => {
-        let k = e[0].dataset.key + ".contains";
-        let o = GURPS.decode(this.actor.data, k) || {};
+        const k = e[0].dataset.key + ".contains";
+        const o = GURPS.decode(this.actor.data, k) || {};
         GURPS.put(o, duplicate(new Equipment("New Equipment")));
         this.actor.update({ [k]: o });
       }
@@ -633,9 +640,9 @@ export class GurpsActorEditorSheet extends GurpsActorSheet {
 
   async _onClickEquip(ev) {
     ev.preventDefault();
-    let element = ev.currentTarget;
-    let key = element.dataset.key;
-    let eqt = GURPS.decode(this.actor.data, key);
+    const element = ev.currentTarget;
+    const key = element.dataset.key;
+    const eqt = GURPS.decode(this.actor.data, key);
     eqt.equipped = !eqt.equipped;
     await this.actor.update({ [key]: eqt });
   }
@@ -669,9 +676,9 @@ export class GurpsActorSimplifiedSheet extends GurpsActorSheet {
 
   async _onClickRollableIcon(ev) {
     ev.preventDefault();
-    let element = ev.currentTarget;
-    let val = element.dataset.value;
-    let parsed = parselink(val);
+    const element = ev.currentTarget;
+    const val = element.dataset.value;
+    const parsed = parselink(val);
     GURPS.performAction(parsed.action, this.actor, ev);
   }
 }
@@ -703,9 +710,9 @@ export class GurpsActorNpcSheet extends GurpsActorSheet {
 
   async _onClickRollableIcon(ev) {
     ev.preventDefault();
-    let element = ev.currentTarget;
-    let val = element.dataset.value;
-    let parsed = parselink(val);
+    const element = ev.currentTarget;
+    const val = element.dataset.value;
+    const parsed = parselink(val);
     GURPS.performAction(parsed.action, this.actor, ev);
   }
 }

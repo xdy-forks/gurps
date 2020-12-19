@@ -1,4 +1,10 @@
 export class SemanticVersion {
+	public major: any;
+	public minor: any;
+	public patch: any;
+	public preRelease: any;
+	public buildMetaData: any;
+	public re: any;
   static re = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
 
   constructor() {

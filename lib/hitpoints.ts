@@ -129,20 +129,20 @@ export default class HitFatPoints {
     return this._buildOutput(list, opt)
   }
 
-  getHpBreakpoints(HP, opt) {
+  getHpBreakpoints(HP, opt?) {
     return this._getBreakpoints(hpConditions, HP, opt)
   }
 
-  hpCondition(HP, member) {
+  hpCondition(HP, member?) {
     let key = this._getConditionKey(HP, hpConditions)
     return hpConditions[key][member]
   }
 
-  getFpBreakpoints(FP, opt) {
+  getFpBreakpoints(FP, opt?) {
     return this._getBreakpoints(fpConditions, FP, opt)
   }
 
-  fpCondition(FP, member) {
+  fpCondition(FP, member?) {
     let key = this._getConditionKey(FP, fpConditions)
     return fpConditions[key][member]
   }

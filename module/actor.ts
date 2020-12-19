@@ -1,14 +1,17 @@
 import { xmlTextToJson } from '../lib/utilities.js'
 import ApplyDamageDialog from '../lib/applydamage.js'
+import {GURPS} from "./gurps";
 
 export class GurpsActor extends Actor {
+	public data: any;
+	public update: any;
 
 	/** @override */
 	getRollData() {
 		const data = super.getRollData();
 		return data;
 	}
-	
+
 	prepareData() {
 		super.prepareData();
 	}
@@ -46,7 +49,7 @@ export class GurpsActor extends Actor {
 		if (!(isFoundryGCS || isFoundryGCA)) {
 			ui.notifications.error("We no longer support the Fantasy Ground import.   Please check the Users Guide (see Chat log).");
 			ChatMessage.create({ content: "<a href='" + GURPS.USER_GUIDE_URL + "'>GURPS 4e Game Aid USERS GUIDE</a>", user: game.user._id, type: CONST.CHAT_MESSAGE_TYPES.OTHER });
-			return;			
+			return;
 		}
 
 		// The character object starts here
@@ -112,7 +115,7 @@ export class GurpsActor extends Actor {
 		console.log(this);
 	}
 
-	// hack to get to private text element created by xml->json method. 
+	// hack to get to private text element created by xml->json method.
 	textFrom(o) {
 		if (!o) return "";
 		let t = o["#text"];
@@ -431,7 +434,7 @@ export class GurpsActor extends Actor {
 	importTraitsfromGCSv1(json) {
 		if (!json) return;
 		let t = this.textFrom;
-		let ts = {};
+		let ts: { race: any; height: any; weight: any; age: any; title: any; player: any; createdon: any; modifiedon: any; religion: any; birthday: any; hand: any; sizemod: any; techlevel: any; appearance: any; gender: any; eyes: any; hair: any; skin: any; };
 		ts.race = t(json.race);
 		ts.height = t(json.height);
 		ts.weight = t(json.weight);
@@ -475,7 +478,7 @@ export class GurpsActor extends Actor {
 		let t = this.textFrom;
 		let data = this.data.data;
 		let att = data.attributes;
-		
+
 		att.ST.value = i(json.strength);
 		att.ST.points = i(json.strength_points);
 		att.DX.value = i(json.dexterity);
@@ -524,7 +527,7 @@ export class GurpsActor extends Actor {
 			data.FP.value = fp;
 		}
 
-		let lm = {};
+		let lm: { basiclift: any; carryonback: any; onehandedlift: any; runningshove: any; shiftslightly: any; shove: any; twohandedlift: any; };
 		lm.basiclift = t(json.basiclift);
 		lm.carryonback = t(json.carryonback);
 		lm.onehandedlift = t(json.onehandedlift);
@@ -567,7 +570,7 @@ export class GurpsActor extends Actor {
 		};
 	}
 
-	// create/update the skills.   
+	// create/update the skills.
 	// NOTE:  For the update to work correctly, no two skills can have the same name.
 	// When reading data, use "this.data.data.skills", however, when updating, use "data.skills".
 	importSkillsFromGCSv1(json, isFoundryGCS) {
@@ -600,7 +603,7 @@ export class GurpsActor extends Actor {
 		};
 	}
 
-	// create/update the spells.   
+	// create/update the spells.
 	// NOTE:  For the update to work correctly, no two spells can have the same name.
 	// When reading data, use "this.data.data.spells", however, when updating, use "data.spells".
 	importSpellsFromGCSv1(json, isFoundryGCS) {
@@ -649,7 +652,7 @@ export class GurpsActor extends Actor {
 	}
 
 	importAdsFromGCA(adsjson, disadsjson) {
-		let list = {};
+		let list;
 		let index = 0;
 		index = this.importBaseAdvantages(list, adsjson, index);
 		this.importBaseAdvantages(list, disadsjson, index);
@@ -659,7 +662,7 @@ export class GurpsActor extends Actor {
 		};
 	}
 
-	importBaseAdvantages(datalist, json, index) {
+	importBaseAdvantages(datalist, json:any, index:number) {
 		if (!json) return;
 		let t = this.textFrom;		/// shortcut to make code smaller
 		for (let key in json) {
@@ -871,6 +874,8 @@ export class Melee extends Attack {
 }
 
 export class Ranged extends Attack {
+	public halfd: any;
+	public max: any;
 	bulk = "";
 	legalityclass = "";
 	ammo = "";
@@ -880,11 +885,11 @@ export class Ranged extends Attack {
 	shots = "";
 	rcl = "";
 	checkRange() {
-		if (!!this.halfd) 
+		if (!!this.halfd)
 			this.range = this.halfd;
 		if (!!this.max)
 			this.range = this.max;
-		if (!!this.halfd && !!this.max) 
+		if (!!this.halfd && !!this.max)
 			this.range = this.halfd + "/" + this.max;
 	}
 }
@@ -899,7 +904,7 @@ export class Encumbrance {
 }
 
 export class Note extends Named {
-	constructor(n) {
+	constructor(n?) {
 		super();
 		this.notes = n;
 	}
@@ -936,7 +941,7 @@ export class HitLocation {
 export class Reaction {
 	modifier = "";
 	situation = "";
-	constructor(m, s) {
+	constructor(m?, s?) {
 		this.modifier = m;
 		this.situation = s;
 	}

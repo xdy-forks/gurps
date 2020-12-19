@@ -8,10 +8,10 @@
   "templateVersion": 2,
   "author": "Chris Normand/Nose66",
   "esmodules": [
-    "module/gurps.js",
-    "lib/SSRT/main.js",
-    "lib/parselink.js",
-    "lib/applydamage.js"
+    "module/gurps.ts",
+    "lib/SSRT/main.ts",
+    "lib/parselink.ts",
+    "lib/applydamage.ts"
   ],
   "styles": [
     "styles/simple.css",

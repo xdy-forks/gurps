@@ -1,6 +1,14 @@
 # IDE
 .idea/
 .vs/
-.DS_Store
-.project
-Thumbs.db
+*.iml
+/.vscode
+icons/\!dox/
+/node_modules/
+
+#This project
+node_modules
+foundryconfig.json
+dist/*
+foundry.js
+

@@ -1,4 +1,6 @@
 export class ThreeD6 extends Application {
+	public render: any;
+
 	constructor(options = {}) {
 		super(options)
 	}
